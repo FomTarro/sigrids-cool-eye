@@ -61,29 +61,9 @@ async def setup(websocket):
     with open('token.json') as json_file:
         data = json.load(json_file)
         json_file.close()
-    ###############################
-    #   command auto generation   #
-    ###############################
-    mdls = await listvtsmodel(websocket)
-    runs = mdls["data"]["numberOfModels"]
-    i=0
-    for key in config['COMMANDS']:
-        i+=1
-    nmumm = runs - i
-    if i < nmumm:
-        with open('commands.ini', "w") as configfile:
-            for i in range(runs):
-                ff = mdls["data"]["availableModels"][i]["modelName"]
-                gg = mdls["data"]["availableModels"][i]["modelID"]
-                name = "!"+ff
-                mdss = mdch.__name__+"("+"websocket"+",'"+str(gg)+"')"
-                config['COMMANDS'][name] = mdss
-            config.write(configfile)
-        ###############################
-        # command auto generation end #
-        ###############################
+        
     print("Successfully Loaded")
-    print("Detected Commands")
-    for key in config['COMMANDS']:
-        print(key)
+    # print("Detected Commands")
+    # for key in config['COMMANDS']:
+    #     print(key)
     return config

@@ -4,9 +4,9 @@ import time
 ######################################
 #          plugin settings           #
 ######################################
-dev = "test"
+dev = "Sigrid"
 reqid = "test"
-name = "test"
+name = "Sigrid's Cool Eye"
 v = "1.0"
 ######################################
 #             functions              #
@@ -134,7 +134,22 @@ async def gethotkeys(websocket,mdid):
     pack = json.loads(json_data)
     return pack
 
-async def getexstate(websocket,detail):
+async def triggerhotkeys(websocket,hotkeyid):
+    payload = {
+            "apiName": "VTubeStudioPublicAPI",
+            "apiVersion": v,
+            "requestID": reqid,
+            "messageType": "HotkeyTriggerRequest",
+            "data": {
+                "hotkeyID": hotkeyid,
+            }
+        }
+    await websocket.send(json.dumps(payload))
+    json_data = await websocket.recv()
+    pack = json.loads(json_data)
+    return pack
+
+async def getexstate(websocket,expressionFile, detail):
     payload = {
             "apiName": "VTubeStudioPublicAPI",
             "apiVersion": v,
@@ -142,7 +157,23 @@ async def getexstate(websocket,detail):
             "messageType": "ExpressionStateRequest",
             "data": {
                 "details": detail,
-                "expressionFile": "myExpression_optional_1.exp3.json",
+                "expressionFile": expressionFile,
+            }
+        }
+    await websocket.send(json.dumps(payload))
+    json_data = await websocket.recv()
+    pack = json.loads(json_data)
+    return pack
+
+async def setexstate(websocket, expressionFile, active):
+    payload = {
+            "apiName": "VTubeStudioPublicAPI",
+            "apiVersion": v,
+            "requestID": reqid,
+            "messageType": "ExpressionActivationRequest",
+            "data": {
+                "active": active,
+                "expressionFile": expressionFile,
             }
         }
     await websocket.send(json.dumps(payload))
@@ -237,8 +268,7 @@ async def TintArtM(websocket,r,g,b,a,tintall,num,exactarray,conarray,tagexactarr
     pack = json.loads(json_data)
     return pack
     
-
-
+# Non-API functions
 async def spin(websocket,x,y,s):
     await mdmv(websocket,0.2,False,x,y,90,s)
     time.sleep(0.1)
