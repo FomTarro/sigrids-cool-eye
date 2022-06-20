@@ -191,7 +191,7 @@ async def facecheck(websocket):
     await websocket.send(json.dumps(payload))
     json_data = await websocket.recv()
     pack = json.loads(json_data)
-    return packpack['data']['found']
+    return pack['data']['found']
 
 async def mdch(websocket,mdid):
     payload = {
